@@ -1,0 +1,15 @@
+- name: Install git
+  apt:
+    name: git
+    state: present
+
+- name: Clone dockprom repository
+  git:
+    repo: https://github.com/stefanprodan/dockprom.git
+    dest: /opt/dockprom
+    force: yes
+
+- name: Start dockprom stack
+  shell: docker compose up -d
+  args:
+    chdir: /opt/dockprom
