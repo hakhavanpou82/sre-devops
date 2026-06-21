@@ -1,0 +1,27 @@
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Create SSL directory
+  file:
+    path: /etc/nginx/ssl/akhavanpour.com
+    state: directory
+    mode: '0700'
+
+- name: Copy nginx grafana config
+  template:
+    src: grafana.conf.j2
+    dest: /etc/nginx/sites-available/grafana
+
+- name: Enable grafana site
+  file:
+    src: /etc/nginx/sites-available/grafana
+    dest: /etc/nginx/sites-enabled/grafana
+    state: link
+
+- name: Reload nginx
+  systemd:
+    name: nginx
+    state: reloaded
