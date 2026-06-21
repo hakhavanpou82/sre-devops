@@ -9,6 +9,12 @@
     dest: /opt/dockprom
     force: yes
 
+- name: Expose node-exporter port 9100
+  replace:
+    path: /opt/dockprom/docker-compose.yml
+    regexp: '(container_name: nodeexporter\n)'
+    replace: "container_name: nodeexporter\n    ports:\n      - \"9100:9100\"\n"
+
 - name: Start dockprom stack
   shell: docker compose up -d
   args:
