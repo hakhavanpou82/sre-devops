@@ -21,13 +21,13 @@
     regexp: '(container_name: grafana\n)'
     replace: "container_name: grafana\n    ports:\n      - \"3000:3000\"\n"
 
-- name: Expose caddy ports 80 and 443
-  replace:
-    path: /opt/dockprom/docker-compose.yml
-    regexp: '(- "3000:3000"\n)'
-    replace: "- \"80:80\"\n      - \"443:443\"\n      - \"3000:3000\"\n"
+- name: Stop caddy container
+  shell: docker compose stop caddy
+  args:
+    chdir: /opt/dockprom
+  ignore_errors: yes
 
-- name: Start dockprom stack
-  shell: docker compose up -d
+- name: Start dockprom stack without caddy
+  shell: docker compose up -d --scale caddy=0
   args:
     chdir: /opt/dockprom

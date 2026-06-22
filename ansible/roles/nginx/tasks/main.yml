@@ -10,6 +10,18 @@
     state: directory
     mode: '0700'
 
+- name: Copy SSL certificate
+  copy:
+    content: "{{ vault_ssl_cert }}"
+    dest: /etc/nginx/ssl/akhavanpour.com/cert.pem
+    mode: '0600'
+
+- name: Copy SSL private key
+  copy:
+    content: "{{ vault_ssl_key }}"
+    dest: /etc/nginx/ssl/akhavanpour.com/key.pem
+    mode: '0600'
+
 - name: Copy nginx grafana config
   template:
     src: grafana.conf.j2
@@ -20,6 +32,7 @@
     src: /etc/nginx/sites-available/grafana
     dest: /etc/nginx/sites-enabled/grafana
     state: link
+    force: yes
 
 - name: Reload nginx
   systemd:
